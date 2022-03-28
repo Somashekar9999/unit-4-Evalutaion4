@@ -125,8 +125,45 @@ router.delete("/:id",crudController.deleteOne(todo));
 
 module.exports=router;
 
+const user=require("..models/user.model")
+const abc=require("jsonwebtoken");
+
+require('dotenv').config()
+const generateToken=(user)=>
+{
+    return abc.sign({user},process.env.SECRET_KEY)
+
+}
+const register =aync (req,res)=>
+{
+    try
+    {
+        let user=await User.findOne({email:req.body.email})
+
+        if(user)
+        {
+            return res.status(400).send({message:"Email already exit"})
+        }
+        user=wait User.create(req.body);
+        const token=generateToken(user)
+        return res.status(200).send({user,token});
+
+    }
+    catch(err)
+    {
+        res.status(400).send({mesage:err.message})
+
+    }
+}
 
 
+const login=async(req,res)=>
+{
+    try{
+        const user=await User.findOne({email:req.body.email})
+        
+    }
+}
 
 
 
